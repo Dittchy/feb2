@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surprise for My Love!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Indie Flower', cursive;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+      color: #e75480;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('1338594.png') no-repeat center center fixed;
+      background-size: cover;
+      filter: blur(2px);
+      z-index: -1;
+      transition: filter 0.5s ease;
+    }
+
+    .blurred-background::before {
+      filter: blur(10px);
+    }
+
+    .blurred-background h1,
+    .blurred-background .back-btn {
+      filter: blur(3px);
+      transition: filter 0.5s ease;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #ff1493;
+      font-size: 2.8em; /* Slightly reduced size */
+      margin: 30px 0;
+    }
+
+    /* Use CSS Grid to stack stickers in a single cell and center them.
+       Added max-width and max-height so the stickers fit on one screen. */
+    .photo-grid {
+      display: grid;
+      place-items: center;
+      position: relative;
+      margin: 30px auto;
+    }
+    
+    /* Hide all stickers except the last sticker element (ignoring non-sticker elements) */
+    .photo-grid .photo:not(:last-of-type) {
+      visibility: hidden;
+    }
+
+    /* The larger worry box styling */
+    .worry-box {
+      position: absolute;
+      top: -70px;  /* Position it above the sticker */
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 240, 245, 0.95);
+      color: #ff1493;
+      padding: 20px 25px;
+      border-radius: 10px;
+      font-size: 1.2em;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 10;
+    }
+
+    /* Base styling for the stickers with reduced size */
+    .photo {
+      grid-area: 1/1; /* All images occupy the same grid cell so they overlap */
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      /* Constrain size to fit within one screen */
+      max-width: 90vw;
+      max-height: 60vh;
+    }
+
+    /* Each sticker is given its own offset and rotation for an unassembled look.
+       These custom properties preserve the same translation/rotation on hover and animation. */
+    .photo.photo1 {
+      --tx: 5px;
+      --ty: 10px;
+      --rot: -5deg;
+      transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+    }
+    .photo.photo2 {
+      --tx: 15px;
+      --ty: -10px;
+      --rot: 3deg;
+      transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+    }
+    .photo.photo3 {
+      --tx: -10px;
+      --ty: 5px;
+      --rot: -2deg;
+      transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+    }
+
+    /* On hover, scale up the visible sticker while preserving its translation/rotation */
+    .photo:hover {
+      transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(1.05);
+    }
+
+    /* Animation: Give the visible sticker a subtle zoom in/out effect */
+    .photo-grid .photo:last-of-type {
+      animation: stickerZoom 3s infinite alternate ease-in-out;
+    }
+
+    @keyframes stickerZoom {
+      from {
+        transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(1);
+      }
+      to {
+        transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(1.05);
+      }
+    }
+
+    .back-btn {
+      background: #ff69b4;
+      color: white;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.2em;
+      cursor: pointer;
+      margin: 30px 0;
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover {
+      background: #ff1493;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Here's to you, the love and flowers that you deserve, my love.</h1>
+    
+    <div class="photo-grid">
+      <!-- The worry box appears above the sticker on long press -->
+      <div class="worry-box">My love, I'm so sorry I can't present these blossoms to you in person. Each flower carries a piece of my heart and whispers of my undying affection. I dream of the day when I can see your eyes light up as you hold them. Until then, let these blooms remind you of my endless, passionate love.</div>
+      <!-- Replace these image sources with your actual sticker image URLs -->
+      <img src="image-from-rawpixel-id-8716122-png-removebg-preview.png" class="photo photo1" alt="Our Memory 1">
+      <img src="image-from-rawpixel-id-7214885-jpeg-removebg-preview.png" class="photo photo2" alt="Our Memory 2">
+      <img src="image-from-rawpixel-id-6748621-jpeg-removebg-preview.png" class="photo photo3" alt="Our Memory 3">
+    </div>
+
+    <button class="back-btn" onclick="window.history.back()">Back to Game</button>
+  </div>
+
+  <script>
+    const photoGrid = document.querySelector('.photo-grid');
+
+    // When the top (visible) sticker is clicked, move it to the back of the stack.
+    photoGrid.addEventListener('click', function (event) {
+      if (event.target && event.target.classList.contains('photo')) {
+        photoGrid.insertBefore(event.target, photoGrid.firstElementChild);
+      }
+    });
+
+    // Long-press functionality: if any sticker is pressed for longer than 3 seconds,
+    // show the worry box and add a blur effect to the background, heading, and button for 5 seconds.
+    const stickers = document.querySelectorAll('.photo');
+    const worryBox = document.querySelector('.worry-box');
+
+    stickers.forEach(sticker => {
+      let pressTimer;
+      
+      // For mouse events
+      sticker.addEventListener('mousedown', function(e) {
+        pressTimer = setTimeout(function() {
+          worryBox.style.display = 'block';
+          document.body.classList.add('blurred-background');
+          // Keep the box visible and elements blurred for 5 seconds
+          setTimeout(() => {
+            worryBox.style.display = 'none';
+            document.body.classList.remove('blurred-background');
+          }, 5000);
+        }, 3000); // 3000 ms long-press detection
+      });
+      sticker.addEventListener('mouseup', function(e) {
+        clearTimeout(pressTimer);
+      });
+      sticker.addEventListener('mouseleave', function(e) {
+        clearTimeout(pressTimer);
+      });
+      
+      // For touch events (mobile)
+      sticker.addEventListener('touchstart', function(e) {
+        pressTimer = setTimeout(function() {
+          worryBox.style.display = 'block';
+          document.body.classList.add('blurred-background');
+          setTimeout(() => {
+            worryBox.style.display = 'none';
+            document.body.classList.remove('blurred-background');
+          }, 5000);
+        }, 3000);
+      });
+      sticker.addEventListener('touchend', function(e) {
+        clearTimeout(pressTimer);
+      });
+    });
+  </script>
+</body>
+</html>
