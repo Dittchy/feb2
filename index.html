@@ -107,6 +107,18 @@
       border-radius: 15px;
       box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
     }
+
+    /* Mobile adjustments for smaller screens */
+    @media (max-width: 600px) {
+      /* Reduce the spacer height on mobile so the video isn’t too far down */
+      .spacer {
+        height: 50vh;
+      }
+      /* Allow the video to take up more width on smaller screens */
+      .video-container video {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -122,7 +134,7 @@
     <h1>I knew it!!! You loved me dearly TT</h1>
     <h1>I love you so much!</h1>
     <!-- The h2 now has extra top margin and the jumping animation -->
-    <h2 class="jumping" style="margin-top: 570px;">Will you be my valentine?</h2>
+    <h2 class="jumping" style="margin-top: 670px;">Will you be my valentine?</h2>
     <!-- Spacer added so that the video is not immediately visible; text remains intact -->
     <div class="spacer" style="height: 100vh;"></div>
     <div class="video-container">
