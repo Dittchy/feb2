@@ -95,6 +95,16 @@
       padding: 20px;
       box-sizing: border-box;
     }
+    
+    /* New Page 3: the happy ending page */
+    #page3 {
+      display: none;
+      position: relative;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
 
     /* Styling for the video container */
     .video-container {
@@ -107,34 +117,22 @@
       border-radius: 15px;
       box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
     }
-
-    /* Mobile adjustments for smaller screens */
-    @media (max-width: 600px) {
-      /* Reduce the spacer height on mobile so the video isn’t too far down */
-      .spacer {
-        height: 50vh;
-      }
-      /* Allow the video to take up more width on smaller screens */
-      .video-container video {
-        max-width: 100%;
-      }
-    }
   </style>
 </head>
 <body>
-  <!-- Page 1: "Do you love me?" with Yes and No buttons (unchanged) -->
+  <!-- Page 1: "Do you love me?" with Yes and No buttons -->
   <div id="page1" class="container">
     <h1 class="jumping">Do you love me?</h1>
     <button id="yesBtn">Yes</button>
     <button id="noBtn">No</button>
   </div>
 
-  <!-- Page 2: After clicking Yes -->
+  <!-- Page 2: After clicking Yes on Page 1 -->
   <div id="page2">
     <h1>I knew it!!! You loved me dearly TT</h1>
     <h1>I love you so much!</h1>
     <!-- The h2 now has extra top margin and the jumping animation -->
-    <h2 class="jumping" style="margin-top: 670px;">Will you be my valentine?</h2>
+    <h2 class="jumping" style="margin-top: 570px;">Will you be my valentine?</h2>
     <!-- Spacer added so that the video is not immediately visible; text remains intact -->
     <div class="spacer" style="height: 100vh;"></div>
     <div class="video-container">
@@ -144,28 +142,45 @@
         Your browser does not support the video tag.
       </video>
     </div>
+    <!-- New Reply Section after the video -->
+    <div id="replySection" style="margin-top: 1050px;">
+      <h1 class="jumping">Will you?</h1>
+      <button id="yesBtn2">Yes(You don't have any other option ;) )</button>
+      <button id="noBtn2">No</button>
+    </div>
+  </div>
+
+  <!-- Page 3: Final page after clicking Yes on the reply section -->
+  <div id="page3">
+    <h1>I'm so happy because of your love!</h1>
+    <p>Every beat of my heart sings your name. Your love fills my world with joy! My love for you is boundless and fills every corner of my heart. I am eternally grateful that you chose to be my girlfriend, and I cherish every moment we share. You always keep up with me, matching my pace and inspiring me to reach higher, and your unwavering support lifts me in ways I never thought possible. Your presence brings joy and warmth to my life, and I admire your strength, compassion, and vibrant spirit. Every day, you remind me of what true love means, and your love makes me feel whole. I promise you that I will never leave you, standing by your side through every challenge and triumph. With you, I have found a partner who not only shares my dreams but also nurtures them with care and understanding. I will always be here for you, cherishing your smile, your laughter, and every little moment in between. My heart is forever yours, and I will continue to love you more deeply with each passing day. Thank you for accepting to be my girlfriend and for making my life infinitely richer and brighter. I promise to cherish you and support you through every joy and challenge we face.</p>
+    <button id="playGameBtn">Let's play a game, My Love..?</button>
   </div>
 
   <script>
-    // Get references to the Yes and No buttons (Page 1)
+    // Function to generate a random position that keeps the button inside the viewport with a margin
+    function getRandomPosition(btn) {
+      const margin = 20;
+      const maxX = window.innerWidth - btn.offsetWidth - 2 * margin;
+      const maxY = window.innerHeight - btn.offsetHeight - 2 * margin;
+      const randomX = Math.floor(Math.random() * maxX) + margin;
+      const randomY = Math.floor(Math.random() * maxY) + margin;
+      return { x: randomX, y: randomY };
+    }
+
+    // Get references for Page 1 buttons
     const yesBtn = document.getElementById('yesBtn');
     const noBtn = document.getElementById('noBtn');
 
-    // When the cursor hovers over the No button, move it to a random position
+    // When the cursor hovers over the No button (Page 1), move it to a random position within the viewport
     noBtn.addEventListener('mouseover', function() {
-      // Calculate a random position within the viewport
-      const maxX = window.innerWidth - noBtn.offsetWidth;
-      const maxY = window.innerHeight - noBtn.offsetHeight;
-      const randomX = Math.floor(Math.random() * maxX);
-      const randomY = Math.floor(Math.random() * maxY);
-
-      // Apply the new position
+      const pos = getRandomPosition(noBtn);
       noBtn.style.position = 'absolute';
-      noBtn.style.left = randomX + 'px';
-      noBtn.style.top = randomY + 'px';
+      noBtn.style.left = pos.x + 'px';
+      noBtn.style.top = pos.y + 'px';
     });
 
-    // When the Yes button is clicked, hide Page 1 and show Page 2
+    // When the Yes button (Page 1) is clicked, hide Page 1 and show Page 2
     yesBtn.addEventListener('click', function() {
       document.getElementById('page1').style.display = 'none';
       document.getElementById('page2').style.display = 'block';
@@ -186,6 +201,30 @@
       });
     }, { threshold: 0.5 });
     observer.observe(video);
+
+    // New Reply Section on Page 2
+    const yesBtn2 = document.getElementById('yesBtn2');
+    const noBtn2 = document.getElementById('noBtn2');
+
+    // When the No button in the reply section is hovered, move it to a random position within the viewport
+    noBtn2.addEventListener('mouseover', function() {
+      const pos = getRandomPosition(noBtn2);
+      noBtn2.style.position = 'absolute';
+      noBtn2.style.left = pos.x + 'px';
+      noBtn2.style.top = pos.y + 'px';
+    });
+
+    // When the Yes button in the reply section is clicked, hide Page 2 and show Page 3
+    yesBtn2.addEventListener('click', function() {
+      document.getElementById('page2').style.display = 'none';
+      document.getElementById('page3').style.display = 'block';
+    });
+
+    // Final Page 3: When the Play Game button is clicked, navigate to rose.html
+    const playGameBtn = document.getElementById('playGameBtn');
+    playGameBtn.addEventListener('click', function() {
+      window.location.href = 'rose.html';
+    });
   </script>
 </body>
 </html>
