@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Eternal Valentine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Indie+Flower&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #FF6F61;
+      --peach-light: #FFDAB9;
+      --peach-dark: #FFE5B4;
+      --bg-overlay: rgba(255, 255, 255, 0.95);
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Dancing Script', cursive;
+      background: linear-gradient(135deg, var(--peach-light), var(--peach-dark));
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    /* Optional blurred background image */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('1338594.png') no-repeat center center;
+      background-size: cover;
+      filter: blur(3px);
+      opacity: 0.4;
+      z-index: -2;
+    }
+    /* Container for falling hearts triggered on correct answer */
+    #falling-hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* Floating Hearts Animation (background and falling effect) */
+    .hearts span,
+    #falling-hearts-container span {
+      position: absolute;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23ff2768" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+      background-size: cover;
+      pointer-events: none;
+      animation: float 6s linear infinite;
+    }
+    @keyframes float {
+      0% {
+        transform: translateY(-10vh) scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+    .container {
+      background: var(--bg-overlay);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(255,105,180,0.3);
+      max-width: 600px;
+      text-align: center;
+      z-index: 1;
+      position: relative;
+      transition: opacity 0.5s ease;
+    }
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      color: var(--primary-color);
+      font-size: 3.5em;
+      margin: 0 0 20px 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    .love-letter {
+      font-size: 1.3em;
+      color: #6d3b47;
+      line-height: 1.5;
+      margin: 20px 0;
+    }
+    .options {
+      margin: 20px 0;
+    }
+    .options button {
+      background: #ff6392;
+      border: 2px solid var(--primary-color);
+      font-size: 1.3em;
+      padding: 15px 30px;
+      margin: 15px;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      color: white;
+      box-shadow: 0 4px 15px rgba(255,39,104,0.2);
+    }
+    .options button:hover {
+      background: var(--primary-color);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(255,39,104,0.3);
+    }
+    .message {
+      font-size: 1.6em;
+      margin: 20px 0;
+      color: var(--primary-color);
+      animation: heartbeat 1.2s infinite;
+    }
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.1); }
+      50% { transform: scale(1); }
+      75% { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
+    /* Pop-up box for correct answer and for "Game #2" clicks */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 100;
+    }
+    .popup-content {
+      text-align: center;
+      font-size: 2em;
+      color: var(--primary-color);
+      /* For default popup messages, use 'Indie Flower', but we override this inline for "GADHI" */
+      font-family: 'Indie Flower', cursive;
+    }
+    /* "Game #2" Label */
+    .game-label {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 1.2em;
+      color: var(--primary-color);
+      font-family: 'Indie Flower', cursive;
+      z-index: 150;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Game Label -->
+  <div class="game-label">Game #2</div>
+
+  <!-- Container for falling hearts triggered on correct answer -->
+  <div id="falling-hearts-container"></div>
+
+  <!-- Background Floating Hearts -->
+  <div class="hearts"></div>
+
+  <!-- Quiz Container -->
+  <div class="container" id="quiz-container">
+    <h1>My Dearest Valentine ❤️</h1>
+    <div class="love-letter">
+      To the one who makes my heart skip a beat,<br>
+      Can you tell me what makes our love so sweet?<br>
+      Let's see if you remember our special way,<br>
+      What's the second day of Valentine's Day?
+    </div>
+    <div class="options">
+      <button onclick="checkAnswer('Rose Day')">🌹 Rose Day</button>
+      <button onclick="checkAnswer('Propose Day')">💍 Propose Day</button>
+      <button onclick="checkAnswer('Chocolate Day')">🍫 Chocolate Day</button>
+      <button onclick="checkAnswer('Friendship Day')">🤝 Friendship Day</button>
+      <button onclick="checkAnswer('Self-Love Day')">💖 Self-Love Day</button>
+    </div>
+    <div class="message" id="message"></div>
+  </div>
+
+  <!-- Pop-up Box for messages -->
+  <div class="popup" id="popup">
+    <div class="popup-content" id="popup-content"></div>
+  </div>
+
+  <script>
+    // Create background floating hearts (starting off-screen at top)
+    function createHearts() {
+      const heartsContainer = document.querySelector('.hearts');
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement('span');
+        heart.style.top = '-10vh';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDelay = Math.random() * 6 + 's';
+        heart.style.width = (Math.random() * 30 + 20) + 'px';
+        heart.style.height = heart.style.width;
+        heartsContainer.appendChild(heart);
+      }
+    }
+    createHearts();
+
+    // Create falling hearts effect for correct answer, appended to the dedicated container
+    function createFallingHearts() {
+      const fallingContainer = document.getElementById("falling-hearts-container");
+      for (let i = 0; i < 50; i++) {
+        const heart = document.createElement('span');
+        heart.style.top = '-10vh';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDelay = Math.random() * 3 + 's';
+        heart.style.width = (Math.random() * 30 + 20) + 'px';
+        heart.style.height = heart.style.width;
+        heart.style.animation = 'float 6s linear infinite';
+        fallingContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+    }
+
+    function checkAnswer(answer) {
+      const messageDiv = document.getElementById('message');
+      const quizContainer = document.getElementById('quiz-container');
+      if (answer === 'Propose Day') {
+        // Set the correct answer message in the popup content
+        document.getElementById('popup-content').innerHTML = "You're absolutely right, my love! 💖<br>Our hearts beat as one forever more...";
+        // Fade out the quiz container (position remains unchanged)
+        quizContainer.style.opacity = '0';
+        setTimeout(() => {
+          quizContainer.style.display = 'none';
+          // Fade in the popup box
+          const popup = document.getElementById('popup');
+          popup.style.opacity = '1';
+          popup.style.pointerEvents = 'auto';
+          // Trigger falling hearts effect
+          createFallingHearts();
+          // After 2 seconds, redirect to congrats.html
+          setTimeout(() => {
+            window.location.href = "congrats.html";
+          }, 2000);
+        }, 500);
+      } else {
+        messageDiv.innerHTML = "Almost there, my sweet! 💘<br>Try again, my heart belongs to you...";
+        quizContainer.classList.add('shake');
+        setTimeout(() => {
+          quizContainer.classList.remove('shake');
+        }, 500);
+      }
+    }
+
+    // Add event listener to the "Game #2" label to display the "GADHI 😛😚" popup message in a different font
+    document.querySelector('.game-label').addEventListener('click', function() {
+      document.getElementById('popup-content').innerHTML = "<strong style='font-family: Georgia, serif;'>GADHI</strong>";
+      const popup = document.getElementById('popup');
+      popup.style.opacity = '1';
+      popup.style.pointerEvents = 'auto';
+      // After 2 seconds, fade out the popup
+      setTimeout(() => {
+        popup.style.opacity = '0';
+        popup.style.pointerEvents = 'none';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

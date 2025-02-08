@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will You Be My Forever?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Indie+Flower&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #FF6F61;
+      --gold: #FFD700;
+      --rose: #FF69B4;
+      --bg-overlay: rgba(255, 245, 240, 0.95);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      background: linear-gradient(135deg, #fff0f6, #ffe6e6);
+      font-family: 'Great Vibes', cursive;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff1493" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="1" fill="%23ff69b4" opacity="0.5"/></svg>');
+      background-size: 20px 20px;
+      opacity: 0.3;
+      z-index: -1;
+    }
+
+    .proposal-container {
+      position: relative;
+      background: var(--bg-overlay);
+      padding: 40px 50px;
+      border-radius: 30px;
+      box-shadow: 0 0 40px rgba(255,105,180,0.2);
+      text-align: center;
+      max-width: 600px;
+      z-index: 10;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    #message-sequence {
+      font-size: 2.2em;
+      color: var(--rose);
+      min-height: 2em;
+      transition: all 0.8s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    #proposal-photo {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 15px;
+      margin-top: 30px;
+      display: none;
+      animation: romanticReveal 2s ease forwards;
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 30px rgba(255,215,0,0.3);
+      position: relative;
+    }
+
+    #proposal-photo::after {
+      content: "♥ Forever Yours ♥";
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--primary-color);
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.5em;
+    }
+
+    @keyframes romanticReveal {
+      0% { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    .hearts-container {
+      position: fixed;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .heart {
+      position: absolute;
+      animation: heartFloat 4s linear infinite;
+      opacity: 0;
+      font-size: 24px;
+    }
+
+    @keyframes heartFloat {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .progress-bar {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 4px;
+      background: rgba(255,105,180,0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--rose), var(--gold));
+      transition: width 3s linear;
+    }
+
+    .yes-button {
+      display: none;
+      margin: 30px auto 0;
+      padding: 15px 40px;
+      font-size: 1.5em;
+      background: linear-gradient(45deg, var(--rose), var(--gold));
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Dancing Script', cursive;
+      box-shadow: 0 5px 15px rgba(255,105,180,0.3);
+    }
+
+    .yes-button:hover {
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 8px 20px rgba(255,105,180,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+  <div class="proposal-container">
+    <div id="message-sequence"></div>
+    <img src="WhatsApp Image 2025-02-08 at 21.11.22_12113a0c.jpg" alt="Our Forever" id="proposal-photo" />
+    <button class="yes-button">Yes, Forever! ❤️</button>
+  </div>
+  <div class="hearts-container"></div>
+
+  <script>
+    const messages = [
+      "My dearest love...",
+      "You're the melody to my heart's song...",
+      "Every moment with you feels like a beautiful dream...",
+      "In your eyes, I've found my love...",
+      "Will you make me the happiest person alive...",
+      "By being my love and support?",
+      "I love you beyond words... 💖"
+    ];
+
+    const msgContainer = document.getElementById('message-sequence');
+    const proposalPhoto = document.getElementById('proposal-photo');
+    const yesButton = document.querySelector('.yes-button');
+    const progressFill = document.querySelector('.progress-fill');
+    const heartsContainer = document.querySelector('.hearts-container');
+
+    let currentMessage = 0;
+    const totalMessages = messages.length;
+
+    function createHearts() {
+      for (let i = 0; i < 50; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = '❤️';
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.animationDelay = `${Math.random() * 2}s`;
+        heartsContainer.appendChild(heart);
+      }
+    }
+
+    function showNextMessage() {
+      if (currentMessage < totalMessages) {
+        msgContainer.style.opacity = 0;
+        msgContainer.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          msgContainer.textContent = messages[currentMessage];
+          msgContainer.style.opacity = 1;
+          msgContainer.style.transform = 'translateY(0)';
+          
+          // Add message-specific animations
+          if (currentMessage === totalMessages - 1) {
+            msgContainer.style.animation = 'heartbeat 1.5s infinite';
+          }
+          
+          currentMessage++;
+          progressFill.style.width = `${(currentMessage / totalMessages) * 100}%`;
+        }, 500);
+      } else {
+        msgContainer.style.display = 'none';
+        proposalPhoto.style.display = 'block';
+        yesButton.style.display = 'block';
+        createHearts();
+      }
+    }
+
+    // Start message sequence
+    setInterval(showNextMessage, 3500);
+
+    // Initial message display
+    setTimeout(() => {
+      showNextMessage();
+    }, 500);
+
+    // Add interactive background effect
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      document.body.style.backgroundPosition = `${x * 100}% ${y * 100}%`;
+    });
+
+    // Yes button interaction
+    yesButton.addEventListener('click', () => {
+      document.body.classList.add('celebrate');
+      yesButton.textContent = "I Do! 💍✨";
+      yesButton.style.transform = 'scale(1.2) rotate(5deg)';
+      setTimeout(() => {
+        alert("You've made me the happiest person! 💖 Forever starts now...");
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Week Celebration!</title>
+  <!-- Using playful fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #ff4081;
+      --secondary-color: #ff9a9e;
+      --accent-color: #fad0c4;
+      --bg-overlay: rgba(255, 255, 255, 0.9);
+    }
+    /* Overall page style with a soft gradient and an optional blurred background image */
+    body {
+      font-family: 'Indie Flower', cursive;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      background: linear-gradient(135deg, #fff0f6, #ffe6e6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; 
+      left: 0; 
+      right: 0; 
+      bottom: 0;
+      background: url('1338594.png') no-repeat center center;
+      background-size: cover;
+      filter: blur(4px);
+      opacity: 0.5;
+      z-index: -1;
+    }
+    
+    /* Container to hold both the spinning wheel and static text */
+    .celebration-container {
+      position: relative;
+      width: 400px;  /* Enlarged container width */
+      height: 400px; /* Enlarged container height */
+    }
+    
+    /* Spinning Wheel Background */
+    .spinning-wheel {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      border: 4px dashed var(--primary-color);
+      box-shadow: 0 0 20px rgba(255, 64, 129, 0.5);
+      animation: spin 8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Static Text Overlay with pulsating effect on its background */
+    .static-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      transform: translate(-50%, -50%);
+      background: var(--bg-overlay);
+      padding: 20px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      text-align: center;
+      animation: pulsate 2s ease-in-out infinite;
+    }
+    @keyframes pulsate {
+      0% { box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+      50% { box-shadow: 0 0 20px rgba(0,0,0,0.4); }
+      100% { box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+    }
+    .static-text p {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.4em;
+      color: var(--primary-color);
+      margin: 0;
+      line-height: 1.4;
+      /* Text pulsating effect */
+      animation: textPulse 2s ease-in-out infinite;
+    }
+    @keyframes textPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    /* Falling hearts for a festive atmosphere */
+    .confetti-piece {
+      position: fixed;
+      top: -50px;
+      font-size: 28px;
+      animation: fall linear;
+      filter: blur(1px);
+      pointer-events: none;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="celebration-container">
+    <div class="spinning-wheel"></div>
+    <div class="static-text">
+      <p>
+        Congrats, lovely soul!<br>
+        You've dazzled through Day 1 of Valentine Week!<br>
+        Let your heart shine bright!<br>
+        ❤️💖✨
+      </p>
+    </div>
+  </div>
+  
+  <!-- Audio element for background music -->
+  <audio id="bg-music" autoplay style="display: none;">
+    <source src="shinchan_bgm.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  
+  <script>
+    // Create falling hearts to maintain the festive vibe
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "confetti-piece";
+      heart.style.left = Math.random() * 100 + "%";
+      const duration = 5 + Math.random() * 5;
+      heart.style.animationDuration = duration + "s";
+      heart.textContent = "❤️";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), duration * 1000);
+    }
+    // Generate hearts every 100ms for increased density
+    setInterval(createHeart, 100);
+    
+    // Redirect to propose.html after 10 seconds
+    setTimeout(() => {
+      window.location.href = "propose.html";
+    }, 10000);
+  </script>
+</body>
+</html>
