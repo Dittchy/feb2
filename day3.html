@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chocolate Day Surprise 🍫</title>
+  <style>
+    /* Main Page Styles */
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #3d1a0f;
+      color: #fff;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: linear-gradient(to bottom right, #3d1a0f, #6b3e2e);
+      overflow: hidden; /* Prevent page scroll due to animations */
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 800px;
+    }
+    .choco-border {
+      border: 15px solid #6b3e2e;
+      border-radius: 30px;
+      padding: 2rem;
+      margin: 2rem;
+      background: #fff5e6;
+      color: #3d1a0f;
+      box-shadow: 0 0 30px rgba(255,215,0,0.3);
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: #6b3e2e;
+      text-shadow: 2px 2px #ffd700;
+      margin-bottom: 1.5rem;
+    }
+    .quiz-section {
+      position: relative;
+      transition: transform 0.5s;
+    }
+    .quiz-section:hover {
+      transform: scale(1.05);
+    }
+    input[type="text"] {
+      padding: 1rem;
+      font-size: 1.2rem;
+      border: 3px solid #6b3e2e;
+      border-radius: 15px;
+      margin: 1rem;
+      width: 250px;
+    }
+    button {
+      background: #6b3e2e;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    button:hover {
+      background: #8b5e34;
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    .vending-machine {
+      display: none;
+      background: #a0522d;
+      padding: 2rem;
+      border-radius: 20px;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 100; /* Keep vending machine in front */
+    }
+    .slot-machine {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .slot {
+      width: 100px;
+      height: 100px;
+      background: white;
+      border: 3px solid #6b3e2e;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .slot span {
+      animation: slotSpin 0.5s infinite;
+      position: absolute;
+    }
+    @keyframes slotSpin {
+      0% { transform: translateY(-200px); }
+      100% { transform: translateY(200px); }
+    }
+    .choco-rain {
+      position: fixed;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+    .choco-emoji {
+      position: absolute;
+      animation: fall linear forwards;
+    }
+    .tear-emoji {
+      position: fixed;
+      animation: fall linear forwards;
+      z-index: 10; /* Behind vending machine */
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
+    /* Error message (hidden by default) */
+    #error {
+      color: red;
+      display: none;
+    }
+    /* Popup message styles */
+    .popup {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      background: rgba(0, 0, 0, 0.8);
+      color: #ffd700;
+      padding: 2rem 3rem;
+      border-radius: 20px;
+      font-size: 2rem;
+      text-align: center;
+      z-index: 1000;
+      opacity: 0;
+      animation: popUp 0.5s forwards;
+    }
+    @keyframes popUp {
+      from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    
+    /* --- Hidden Mini Game & Background Decoration Styles --- */
+    /* Fixed secret trigger for mini game in bottom right (transparent like background) */
+    #secretTrigger {
+      display: none;
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 2rem;
+      z-index: 1500;
+      opacity: 0.15;
+    }
+    /* Fixed love message trigger for girlfriend in bottom left */
+    #loveMessageTrigger {
+      display: none;
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      cursor: pointer;
+      font-size: 2rem;
+      z-index: 1500;
+      opacity: 0.15;
+    }
+    /* Background decorative chocolate emojis for vending machine page */
+    .bg-chocolate {
+      position: fixed;
+      font-size: 2rem;
+      opacity: 0.15;
+      z-index: 90; /* behind vending machine */
+      pointer-events: none;
+    }
+    /* Full-screen overlay for the mini game */
+    #miniGame {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 2000;
+    }
+    #gameCanvas {
+      background: #fff;
+      display: block;
+      margin: 50px auto;
+    }
+    /* Correct Answer Message (hidden initially) */
+    .correct-answer {
+      display: none;
+      font-size: 1.5rem;
+      color: #ffd700;
+      text-shadow: 2px 2px #6b3e2e;
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Quiz Section -->
+    <div class="choco-border quiz-section">
+      <h1>🍫 Quiz Time!! 🍫</h1>
+      <p>What day of Valentine's Week is dedicated to sweet treats?</p>
+      <input type="text" id="answer" placeholder="Enter your answer...">
+      <br>
+      <button onclick="checkAnswer()">Check Answer 💖</button>
+      <div id="error">Nice try! 🚫 Not quite sweet enough!</div>
+    </div>
+    
+    <!-- Vending Machine Section -->
+    <div class="vending-machine">
+      <h1>Chocolate Vending Machine 🎰</h1>
+      <div class="slot-machine">
+        <div class="slot" id="slot1"><span>🍫</span></div>
+        <div class="slot" id="slot2"><span>🍬</span></div>
+        <div class="slot" id="slot3"><span>🍩</span></div>
+      </div>
+      <button onclick="spinSlots()">Spin to Win Chocolates! 🎡 My Love ❤️</button>
+      <div id="result"></div>
+    </div>
+    
+    <!-- Correct Answer Message (hidden initially) -->
+    <div class="correct-answer">
+      <h2>Congratulations! 🎉</h2>
+      <p>You've unlocked the Chocolate Vault! 🏦💖</p>
+    </div>
+  </div>
+  
+  <!-- Hidden Mini Game Easter Egg Overlay -->
+  <div id="miniGame">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <button onclick="exitMiniGame()" style="position: absolute; top: 10px; right: 10px; z-index:2100;">Exit Game</button>
+  </div>
+  
+  <!-- Fixed Easter Egg Triggers (hidden by default) -->
+  <!-- Mini game trigger in the bottom right (transparent) -->
+  <div id="secretTrigger">🍫</div>
+  <!-- Love message trigger in the bottom left (transparent) -->
+  <div id="loveMessageTrigger">❤️</div>
+  
+  <script>
+    /* --- Main Page Scripts --- */
+    function checkAnswer() {
+      const answer = document.getElementById('answer').value.toLowerCase();
+      const error = document.getElementById('error');
+      
+      if(answer.includes('chocolate day')) {
+        error.style.display = 'none';
+        // Show pop-up message for correct answer and reveal correct answer text
+        showPopupMessage("Congratulations! 🎉 You've unlocked the Chocolate Vault! 🏦💖");
+        document.querySelector('.quiz-section').style.display = 'none';
+        document.querySelector('.vending-machine').style.display = 'block';
+        document.querySelector('.correct-answer').style.display = 'block';
+        // Create background decorative chocolates on the vending machine page
+        createBackgroundChocolates();
+        // Reveal the easter egg triggers
+        document.getElementById('secretTrigger').style.display = 'block';
+        document.getElementById('loveMessageTrigger').style.display = 'block';
+      } else {
+        error.style.display = 'block';
+        createTearRain();
+        showPopupMessage("How can you be so wrong?");
+        setTimeout(() => error.style.display = 'none', 2000);
+      }
+    }
+    
+    // Create falling tear animations (using 😢) for incorrect answer
+    function createTearRain() {
+      for(let i = 0; i < 50; i++) {
+        const tear = document.createElement('div');
+        tear.className = 'tear-emoji';
+        tear.style.left = Math.random() * 100 + 'vw';
+        tear.style.top = '-50px';
+        tear.style.animationDuration = Math.random() * 3 + 2 + 's';
+        tear.textContent = '😢';
+        document.body.appendChild(tear);
+        setTimeout(() => tear.remove(), 5000);
+      }
+    }
+    
+    // Create falling chocolate animations (for jackpot)
+    function createChocoRain() {
+      for(let i = 0; i < 50; i++) {
+        const choco = document.createElement('div');
+        choco.className = 'choco-emoji';
+        choco.style.left = Math.random() * 100 + 'vw';
+        choco.style.top = '-50px';
+        choco.style.animationDuration = Math.random() * 3 + 2 + 's';
+        choco.textContent = '🍫';
+        document.body.appendChild(choco);
+        setTimeout(() => choco.remove(), 5000);
+      }
+    }
+    
+    // Weighted random symbol selection for slot machine
+    function getRandomSymbol() {
+      if (Math.random() < 0.45) {
+        return '🍫';
+      } else {
+        const otherSymbols = ['🍬', '🍩', '🍎', '🍒', '🍭'];
+        return otherSymbols[Math.floor(Math.random() * otherSymbols.length)];
+      }
+    }
+    
+    // Slot machine functionality
+    function spinSlots() {
+      const slots = document.querySelectorAll('.slot');
+      const results = [];
+      
+      slots.forEach((slot, index) => {
+        const randomSymbol = getRandomSymbol();
+        results.push(randomSymbol);
+        slot.innerHTML = `<span>${randomSymbol}</span>`;
+        slot.style.animation = 'slotSpin 0.1s 10';
+        setTimeout(() => { slot.style.animation = ''; }, 1000 + (index * 200));
+      });
+      
+      setTimeout(() => {
+        if(results.every(v => v === '🍫')) {
+          showPopupMessage('<h2>JACKPOT! 🎉 You won unlimited chocolates! 🍫🍫🍫</h2>');
+          createChocoRain();
+        } else {
+          showPopupMessage(`<h2>You got: ${results.join(' ')}! Try again! 😉</h2>`);
+        }
+      }, 1500);
+    }
+    
+    // Display popup messages
+    function showPopupMessage(message) {
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.innerHTML = message;
+      document.body.appendChild(popup);
+      setTimeout(() => {
+        popup.style.animation = 'fadeOut 0.5s forwards';
+        setTimeout(() => popup.remove(), 500);
+      }, 2000);
+    }
+    
+    /* --- Hidden Mini Game Code --- */
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    let gameRunning = false;
+    let basket = { x: canvas.width / 2 - 50, y: canvas.height - 30, width: 100, height: 20 };
+    let chocolates = [];
+    let score = 0;
+    let gameLoopId;
+    let isDragging = false;
+    
+    // Allow click and drag for the basket (plate)
+    canvas.addEventListener('mousedown', function(e) {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      if(mouseX >= basket.x && mouseX <= basket.x + basket.width &&
+         mouseY >= basket.y && mouseY <= basket.y + basket.height) {
+           isDragging = true;
+      }
+    });
+    
+    canvas.addEventListener('mousemove', function(e) {
+      if(isDragging) {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        // Center the basket at the mouse's X position for increased sensitivity
+        basket.x = mouseX - basket.width / 2;
+        if(basket.x < 0) basket.x = 0;
+        if(basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
+      }
+    });
+    
+    canvas.addEventListener('mouseup', function() {
+      isDragging = false;
+    });
+    
+    canvas.addEventListener('mouseleave', function() {
+      isDragging = false;
+    });
+    
+    // Arrow keys still work for movement with increased sensitivity
+    document.addEventListener('keydown', (e) => {
+      if (!gameRunning) return;
+      const speed = 30;
+      if (e.key === 'ArrowLeft' && basket.x > 0) {
+        basket.x -= speed;
+      } else if (e.key === 'ArrowRight' && basket.x + basket.width < canvas.width) {
+        basket.x += speed;
+      }
+    });
+    
+    function spawnChocolate() {
+      const x = Math.random() * (canvas.width - 30);
+      chocolates.push({ x: x, y: -30, size: 30, speed: Math.random() * 2 + 2 });
+    }
+    
+    function checkCollision(choco) {
+      return (
+        choco.x < basket.x + basket.width &&
+        choco.x + choco.size > basket.x &&
+        choco.y < basket.y + basket.height &&
+        choco.y + choco.size > basket.y
+      );
+    }
+    
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Draw the basket (plate)
+      ctx.fillStyle = '#6b3e2e';
+      ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+      
+      if (Math.random() < 0.02) {
+        spawnChocolate();
+      }
+      
+      for (let i = chocolates.length - 1; i >= 0; i--) {
+        let choco = chocolates[i];
+        choco.y += choco.speed;
+        ctx.font = "30px serif";
+        ctx.fillText("🍫", choco.x, choco.y);
+        if (checkCollision(choco)) {
+          chocolates.splice(i, 1);
+          score++;
+        } else if (choco.y > canvas.height) {
+          chocolates.splice(i, 1);
+        }
+      }
+      
+      ctx.fillStyle = '#000';
+      ctx.font = "20px sans-serif";
+      ctx.fillText("Score: " + score, 10, 25);
+      
+      if (gameRunning) {
+        gameLoopId = requestAnimationFrame(gameLoop);
+      }
+    }
+    
+    function startMiniGame() {
+      gameRunning = true;
+      basket.x = canvas.width / 2 - 50;
+      chocolates = [];
+      score = 0;
+      gameLoop();
+    }
+    
+    function exitMiniGame() {
+      gameRunning = false;
+      cancelAnimationFrame(gameLoopId);
+      document.getElementById('miniGame').style.display = 'none';
+      chocolates = [];
+      score = 0;
+    }
+    
+    /* --- Background Chocolate Decorations for Vending Machine Page --- */
+    function createBackgroundChocolates() {
+      const numChocolates = 20;
+      const container = document.body;
+      for (let i = 0; i < numChocolates; i++) {
+        const chocolate = document.createElement('div');
+        chocolate.className = 'bg-chocolate';
+        chocolate.textContent = '🍫';
+        chocolate.style.top = Math.random() * 100 + 'vh';
+        chocolate.style.left = Math.random() * 100 + 'vw';
+        container.appendChild(chocolate);
+      }
+    }
+    
+    /* --- Fixed Easter Egg Trigger Event Listeners --- */
+    // Mini game trigger (bottom right)
+    document.getElementById('secretTrigger').addEventListener('click', function() {
+      document.getElementById('miniGame').style.display = 'block';
+      startMiniGame();
+    });
+    
+    // Love message trigger (bottom left)
+    document.getElementById('loveMessageTrigger').addEventListener('click', function() {
+      showPopupMessage("Mutkuuu!!! Ye sab chocolate vgera to hoti rahengi wanna eat me!?😛😚");
+    });
+  </script>
+</body>
+</html>
