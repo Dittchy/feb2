@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Do You Love Me?</title>
+  <title>Love Test</title>
   <style>
-    /* Import a cute, handwritten font from Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 
-    /* Overall body styles */
     body {
       font-family: 'Indie Flower', cursive;
       text-align: center;
@@ -17,10 +15,9 @@
       height: 100vh;
       position: relative;
       color: #e75480;
-      background: none; /* We'll use a pseudo-element for the background image */
+      background: none;
     }
 
-    /* Pseudo-element for the background image with a subtle blur effect */
     body::before {
       content: "";
       position: fixed;
@@ -30,11 +27,39 @@
       bottom: 0;
       background: url('1338594.png') no-repeat center center fixed;
       background-size: cover;
-      filter: blur(2px); /* Subtle blur effect */
+      filter: blur(2px);
       z-index: -1;
     }
 
-    /* Common container style for centering content vertically */
+    #loginPage {
+      position: absolute;
+      width: 100%;
+      top: 30%;
+      transform: translateY(-50%);
+    }
+    
+    #loginPage input {
+      font-family: 'Indie Flower', cursive;
+      font-size: 1.5em;
+      padding: 15px;
+      margin: 15px auto;
+      border: 3px solid #e75480;
+      border-radius: 25px;
+      width: 80%;
+      max-width: 350px;
+      background: rgba(255, 255, 255, 0.8);
+      text-align: center;
+      display: block;
+    }
+
+    #errorMsg {
+      color: #ff0000;
+      font-size: 1.5em;
+      display: none;
+      margin-top: 20px;
+      text-shadow: 1px 1px #ffffff;
+    }
+
     .container {
       position: absolute;
       width: 100%;
@@ -42,31 +67,17 @@
       transform: translateY(-50%);
     }
 
-    /* Define a keyframe animation for the jumping (bouncing) effect */
     @keyframes jump {
       0% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
       100% { transform: translateY(0); }
     }
 
-    /* Apply the animation and larger font size to the main title */
     .jumping {
-      font-size: 4em; /* Bigger text */
+      font-size: 4em;
       margin-bottom: 20px;
       text-shadow: 2px 2px #ffb6c1;
-      animation: jump 1.5s infinite; /* Jumping animation */
-    }
-
-    /* Other h1 elements keep default styling */
-    h1:not(.jumping) {
-      font-size: 3em;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px #ffb6c1;
-    }
-
-    p {
-      font-size: 1.5em;
-      margin-bottom: 20px;
+      animation: jump 1.5s infinite;
     }
 
     button {
@@ -79,25 +90,14 @@
       background: linear-gradient(145deg, #ff9a9e, #fad0c4);
       box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s ease;
-      color: #333; /* Dark text color for buttons */
+      color: #333;
     }
 
     button:hover {
       transform: scale(1.1);
     }
 
-    /* Page 2 starts hidden and is modified to allow scrolling while keeping all text intact */
-    #page2 {
-      display: none;
-      position: relative; /* Allow natural flow for scrolling */
-      height: 100vh;
-      overflow-y: auto;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    
-    /* New Page 3: the happy ending page */
-    #page3 {
+    #page2, #page3 {
       display: none;
       position: relative;
       height: 100vh;
@@ -106,125 +106,271 @@
       box-sizing: border-box;
     }
 
-    /* Styling for the video container */
-    .video-container {
-      margin-top: 20px;
-    }
-
     .video-container video {
       max-width: 90%;
       height: auto;
       border-radius: 15px;
       box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
     }
+
+    .popup {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      background: rgba(0, 0, 0, 0.8);
+      color: #ffd700;
+      padding: 2rem 3rem;
+      border-radius: 20px;
+      font-size: 2rem;
+      text-align: center;
+      z-index: 1000;
+      opacity: 0;
+      animation: popUp 0.5s forwards;
+    }
+
+    @keyframes popUp {
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    #miniGame {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 2000;
+    }
+
+    #gameCanvas {
+      background: #fff;
+      display: block;
+      margin: 50px auto;
+    }
   </style>
 </head>
 <body>
-  <!-- Page 1: "Do you love me?" with Yes and No buttons -->
-  <div id="page1" class="container">
+  <!-- Login Page -->
+  <div id="loginPage" class="container">
+    <h1 class="jumping">Secret Love Gateway</h1>
+    <form id="loginForm">
+      <input type="text" id="name" placeholder="Your Secret Name" required>
+      <input type="text" id="day" placeholder="Visit Day (For Mutki: 1, 2, or 3)" style="display: none;">
+      <button type="submit">Unlock Our Love</button>
+    </form>
+    <p id="errorMsg">Nice try imposter!! Our love is protected! 💖</p>
+  </div>
+
+  <!-- Main Content Pages -->
+  <div id="page1" class="container" style="display: none;">
     <h1 class="jumping">Do you love me?</h1>
     <button id="yesBtn">Yes</button>
     <button id="noBtn">No</button>
   </div>
 
-  <!-- Page 2: After clicking Yes on Page 1 -->
   <div id="page2">
     <h1>I knew it!!! You loved me dearly TT</h1>
     <h1>I love you so much!</h1>
-    <!-- The h2 now has extra top margin and the jumping animation -->
-    <h2 class="jumping" style="margin-top: 570px;">Will you be my valentine?</h2>
-    <!-- Spacer added so that the video is not immediately visible; text remains intact -->
-    <div class="spacer" style="height: 100vh;"></div>
     <div class="video-container">
-      <!-- Video now includes autoplay, muted, and playsinline attributes -->
       <video autoplay muted playsinline controls>
         <source src="yes - Made with Clipchamp.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
     </div>
-    <!-- New Reply Section after the video -->
-    <div id="replySection" style="margin-top: 1050px;">
-      <h1 class="jumping">Will you?</h1>
-      <button id="yesBtn2">Yes(You don't have any other option ;) )</button>
+    <div id="replySection">
+      <h1 class="jumping">Will you be my valentine?</h1>
+      <button id="yesBtn2">Yes (No other option 😉)</button>
       <button id="noBtn2">No</button>
     </div>
   </div>
 
-  <!-- Page 3: Final page after clicking Yes on the reply section -->
   <div id="page3">
     <h1>I'm so happy because of your love!</h1>
-    <p>Every beat of my heart sings your name. Your love fills my world with joy! My love for you is boundless and fills every corner of my heart. I am eternally grateful that you chose to be my girlfriend, and I cherish every moment we share. You always keep up with me, matching my pace and inspiring me to reach higher, and your unwavering support lifts me in ways I never thought possible. Your presence brings joy and warmth to my life, and I admire your strength, compassion, and vibrant spirit. Every day, you remind me of what true love means, and your love makes me feel whole. I promise you that I will never leave you, standing by your side through every challenge and triumph. With you, I have found a partner who not only shares my dreams but also nurtures them with care and understanding. I will always be here for you, cherishing your smile, your laughter, and every little moment in between. My heart is forever yours, and I will continue to love you more deeply with each passing day. Thank you for accepting to be my girlfriend and for making my life infinitely richer and brighter. I promise to cherish you and support you through every joy and challenge we face.</p>
+    <p>Every beat of my heart sings your name. Your love fills my world with joy...</p>
     <button id="playGameBtn">Let's play a game, My Love..?</button>
   </div>
 
+  <!-- Mini Game -->
+  <div id="miniGame">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <button onclick="exitMiniGame()" style="position: absolute; top: 10px; right: 10px;">Exit Game</button>
+  </div>
+
   <script>
-    // Function to generate a random position that keeps the button inside the viewport with a margin
-    function getRandomPosition(btn) {
-      const margin = 20;
-      const maxX = window.innerWidth - btn.offsetWidth - 2 * margin;
-      const maxY = window.innerHeight - btn.offsetHeight - 2 * margin;
-      const randomX = Math.floor(Math.random() * maxX) + margin;
-      const randomY = Math.floor(Math.random() * maxY) + margin;
-      return { x: randomX, y: randomY };
+    // Login Logic with name changes
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('name');
+      const dayInput = document.getElementById('day');
+      const errorMsg = document.getElementById('errorMsg');
+      const name = nameInput.value.trim().toLowerCase();
+      const day = dayInput.value.trim();
+
+      // Reset styles
+      nameInput.style.borderColor = '#e75480';
+      dayInput.style.borderColor = '#e75480';
+      errorMsg.style.display = 'none';
+
+      if (dayInput.style.display === 'none') {
+        // Name validation stage
+        if (name === 'mutki') {
+          dayInput.style.display = 'block';
+          dayInput.focus();
+        } else if (name === 'anshika' || name === 'sanya') {
+          showPage('page1');
+        } else {
+          showError(nameInput);
+        }
+      } else {
+        // Day validation stage
+        if (['1', '2', '3'].includes(day)) {
+          if (day === '1') showPage('page1');
+          else window.location.href = `day${day}.html`;
+        } else {
+          showError(dayInput);
+          dayInput.style.display = 'none';
+          nameInput.focus();
+        }
+      }
+    });
+
+    function showPage(pageId) {
+      document.getElementById('loginPage').style.display = 'none';
+      document.querySelectorAll('.container, #page2, #page3').forEach(el => {
+        el.style.display = el.id === pageId ? 'block' : 'none';
+      });
     }
 
-    // Get references for Page 1 buttons
-    const yesBtn = document.getElementById('yesBtn');
-    const noBtn = document.getElementById('noBtn');
+    function showError(inputElement) {
+      inputElement.style.borderColor = 'red';
+      document.getElementById('errorMsg').style.display = 'block';
+      showPopupMessage("Invalid input! ❌");
+    }
 
-    // When the cursor hovers over the No button (Page 1), move it to a random position within the viewport
-    noBtn.addEventListener('mouseover', function() {
-      const pos = getRandomPosition(noBtn);
-      noBtn.style.position = 'absolute';
-      noBtn.style.left = pos.x + 'px';
-      noBtn.style.top = pos.y + 'px';
-    });
-
-    // When the Yes button (Page 1) is clicked, hide Page 1 and show Page 2
-    yesBtn.addEventListener('click', function() {
-      document.getElementById('page1').style.display = 'none';
-      document.getElementById('page2').style.display = 'block';
-    });
-
-    // Intersection Observer for the video in Page 2:
-    // When the video is at least 50% visible, unmute and play it; otherwise, pause and mute it.
-    const video = document.querySelector('.video-container video');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          video.muted = false;
-          video.play();
+    // Button Logic
+    function initializeButton(btn, isYes) {
+      btn.addEventListener(isYes ? 'click' : 'mouseover', () => {
+        if (isYes) {
+          if (btn.id === 'yesBtn') showPage('page2');
+          if (btn.id === 'yesBtn2') showPage('page3');
         } else {
-          video.pause();
-          video.muted = true;
+          moveButton(btn);
         }
       });
-    }, { threshold: 0.5 });
-    observer.observe(video);
+    }
 
-    // New Reply Section on Page 2
-    const yesBtn2 = document.getElementById('yesBtn2');
-    const noBtn2 = document.getElementById('noBtn2');
+    function moveButton(btn) {
+      const rect = btn.getBoundingClientRect();
+      const newX = Math.random() * (window.innerWidth - rect.width);
+      const newY = Math.random() * (window.innerHeight - rect.height);
+      btn.style.position = 'absolute';
+      btn.style.left = `${newX}px`;
+      btn.style.top = `${newY}px`;
+    }
 
-    // When the No button in the reply section is hovered, move it to a random position within the viewport
-    noBtn2.addEventListener('mouseover', function() {
-      const pos = getRandomPosition(noBtn2);
-      noBtn2.style.position = 'absolute';
-      noBtn2.style.left = pos.x + 'px';
-      noBtn2.style.top = pos.y + 'px';
+    // Initialize buttons
+    ['yesBtn', 'noBtn', 'yesBtn2', 'noBtn2'].forEach(id => {
+      initializeButton(document.getElementById(id), id.startsWith('yes'));
     });
 
-    // When the Yes button in the reply section is clicked, hide Page 2 and show Page 3
-    yesBtn2.addEventListener('click', function() {
-      document.getElementById('page2').style.display = 'none';
-      document.getElementById('page3').style.display = 'block';
+    // Video Observer
+    new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const video = entry.target;
+        entry.isIntersecting ? video.play() : video.pause();
+      });
+    }, { threshold: 0.5 }).observe(document.querySelector('video'));
+
+    // Popup System
+    function showPopupMessage(text) {
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.textContent = text;
+      document.body.appendChild(popup);
+      setTimeout(() => popup.remove(), 2500);
+    }
+
+    // Mini Game Logic
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    let gameRunning = false;
+    let basket = { x: 350, y: 550, width: 100, height: 20 };
+    let chocolates = [];
+    let score = 0;
+
+    canvas.addEventListener('mousedown', startDrag);
+    canvas.addEventListener('mousemove', dragBasket);
+    canvas.addEventListener('mouseup', stopDrag);
+    canvas.addEventListener('mouseleave', stopDrag);
+
+    function startDrag(e) {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      if (mouseX >= basket.x && mouseX <= basket.x + basket.width) {
+        basket.dragging = true;
+      }
+    }
+
+    function dragBasket(e) {
+      if (basket.dragging) {
+        const rect = canvas.getBoundingClientRect();
+        basket.x = e.clientX - rect.left - basket.width/2;
+        basket.x = Math.max(0, Math.min(canvas.width - basket.width, basket.x));
+      }
+    }
+
+    function stopDrag() {
+      basket.dragging = false;
+    }
+
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw basket
+      ctx.fillStyle = '#6b3e2e';
+      ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+      
+      // Update chocolates
+      chocolates.forEach((choco, index) => {
+        choco.y += choco.speed;
+        ctx.font = '30px Arial';
+        ctx.fillText('🍫', choco.x, choco.y);
+        
+        if (choco.y >= basket.y - 30 && choco.x >= basket.x && choco.x <= basket.x + basket.width) {
+          chocolates.splice(index, 1);
+          score++;
+        }
+      });
+
+      if (Math.random() < 0.02) {
+        chocolates.push({
+          x: Math.random() * 770,
+          y: 0,
+          speed: Math.random() * 3 + 2
+        });
+      }
+
+      ctx.fillStyle = 'black';
+      ctx.font = '24px Arial';
+      ctx.fillText(`Score: ${score}`, 10, 30);
+
+      if (gameRunning) requestAnimationFrame(gameLoop);
+    }
+
+    document.getElementById('playGameBtn').addEventListener('click', () => {
+      document.getElementById('miniGame').style.display = 'block';
+      gameRunning = true;
+      gameLoop();
     });
 
-    // Final Page 3: When the Play Game button is clicked, navigate to rose.html
-    const playGameBtn = document.getElementById('playGameBtn');
-    playGameBtn.addEventListener('click', function() {
-      window.location.href = 'rose.html';
-    });
+    function exitMiniGame() {
+      gameRunning = false;
+      document.getElementById('miniGame').style.display = 'none';
+      chocolates = [];
+      score = 0;
+    }
   </script>
 </body>
 </html>
