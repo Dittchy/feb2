@@ -152,6 +152,32 @@
       transform: scale(1.1) rotate(2deg);
       box-shadow: 0 8px 20px rgba(255,105,180,0.5);
     }
+    
+    /* Chocolate Day Popup Styles (No Buttons) */
+    #popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    
+    .popup-content {
+      background: #D2691E;
+      color: #fff;
+      padding: 30px;
+      border: 3px solid #8B4513;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 80%;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2em;
+    }
   </style>
 </head>
 <body>
@@ -162,6 +188,13 @@
     <button class="yes-button">Yes, Forever! ❤️</button>
   </div>
   <div class="hearts-container"></div>
+  
+  <!-- Chocolate Day Popup Overlay (No Question, Auto-redirect) -->
+  <div id="popup-overlay">
+    <div class="popup-content">
+      <p id="popup-message"></p>
+    </div>
+  </div>
 
   <script>
     const messages = [
@@ -198,17 +231,13 @@
       if (currentMessage < totalMessages) {
         msgContainer.style.opacity = 0;
         msgContainer.style.transform = 'translateY(20px)';
-        
         setTimeout(() => {
           msgContainer.textContent = messages[currentMessage];
           msgContainer.style.opacity = 1;
           msgContainer.style.transform = 'translateY(0)';
-          
-          // Add message-specific animations
           if (currentMessage === totalMessages - 1) {
             msgContainer.style.animation = 'heartbeat 1.5s infinite';
           }
-          
           currentMessage++;
           progressFill.style.width = `${(currentMessage / totalMessages) * 100}%`;
         }, 500);
@@ -222,8 +251,6 @@
 
     // Start message sequence
     setInterval(showNextMessage, 3500);
-
-    // Initial message display
     setTimeout(() => {
       showNextMessage();
     }, 500);
@@ -235,13 +262,28 @@
       document.body.style.backgroundPosition = `${x * 100}% ${y * 100}%`;
     });
 
-    // Yes button interaction
+    // Function to show the popup overlay that expresses love and auto-redirects
+    function showPopup() {
+      const popupOverlay = document.getElementById('popup-overlay');
+      const popupMessage = document.getElementById('popup-message');
+      popupOverlay.style.display = 'flex';
+      popupMessage.textContent = "I am so happy!!!! I'll love you forever Mutkiiiii!!!";
+      // After 2 seconds, update message and redirect
+      setTimeout(() => {
+        popupMessage.textContent = "My Love lets go to the 3rd day of the Valentine week together 😉👩🏻‍❤️‍👨🏻.";
+        setTimeout(() => {
+          window.location.href = 'day3.html';
+        }, 2000);
+      }, 5000);
+    }
+
+    // Yes button interaction from main proposal container
     yesButton.addEventListener('click', () => {
       document.body.classList.add('celebrate');
       yesButton.textContent = "I Do! 💍✨";
       yesButton.style.transform = 'scale(1.2) rotate(5deg)';
       setTimeout(() => {
-        alert("You've made me the happiest person! 💖 Forever starts now...");
+        showPopup();
       }, 1000);
     });
   </script>
