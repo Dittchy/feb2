@@ -108,9 +108,18 @@
 
     .video-container video {
       max-width: 90%;
-      height: auto;
+      position: relative; /* or absolute */
+      top: 650px;         /* adjust this value as needed */
+      left: 0;
+      right: 0;
+      margin: 0 auto;
       border-radius: 15px;
       box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* Position the reply section 650px below the video */
+    #replySection {
+      margin-top: 1250px;
     }
 
     .popup {
@@ -131,23 +140,6 @@
 
     @keyframes popUp {
       to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    }
-
-    #miniGame {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.85);
-      z-index: 2000;
-    }
-
-    #gameCanvas {
-      background: #fff;
-      display: block;
-      margin: 50px auto;
     }
   </style>
 </head>
@@ -188,14 +180,8 @@
 
   <div id="page3">
     <h1>I'm so happy because of your love!</h1>
-    <p>Every beat of my heart sings your name. Your love fills my world with joy...</p>
+    <p>Every beat of my heart sings your name. Your love fills my world with joy! My love for you is boundless and fills every corner of my heart. I am eternally grateful that you chose to be my girlfriend, and I cherish every moment we share. You always keep up with me, matching my pace and inspiring me to reach higher, and your unwavering support lifts me in ways I never thought possible. Your presence brings joy and warmth to my life, and I admire your strength, compassion, and vibrant spirit. Every day, you remind me of what true love means, and your love makes me feel whole. I promise you that I will never leave you, standing by your side through every challenge and triumph. With you, I have found a partner who not only shares my dreams but also nurtures them with care and understanding. I will always be here for you, cherishing your smile, your laughter, and every little moment in between. My heart is forever yours, and I will continue to love you more deeply with each passing day. Thank you for accepting to be my girlfriend and for making my life infinitely richer and brighter. I promise to cherish you and support you through every joy and challenge we face.</p>
     <button id="playGameBtn">Let's play a game, My Love..?</button>
-  </div>
-
-  <!-- Mini Game -->
-  <div id="miniGame">
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <button onclick="exitMiniGame()" style="position: absolute; top: 10px; right: 10px;">Exit Game</button>
   </div>
 
   <script>
@@ -292,85 +278,10 @@
       setTimeout(() => popup.remove(), 2500);
     }
 
-    // Mini Game Logic
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    let gameRunning = false;
-    let basket = { x: 350, y: 550, width: 100, height: 20 };
-    let chocolates = [];
-    let score = 0;
-
-    canvas.addEventListener('mousedown', startDrag);
-    canvas.addEventListener('mousemove', dragBasket);
-    canvas.addEventListener('mouseup', stopDrag);
-    canvas.addEventListener('mouseleave', stopDrag);
-
-    function startDrag(e) {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      if (mouseX >= basket.x && mouseX <= basket.x + basket.width) {
-        basket.dragging = true;
-      }
-    }
-
-    function dragBasket(e) {
-      if (basket.dragging) {
-        const rect = canvas.getBoundingClientRect();
-        basket.x = e.clientX - rect.left - basket.width/2;
-        basket.x = Math.max(0, Math.min(canvas.width - basket.width, basket.x));
-      }
-    }
-
-    function stopDrag() {
-      basket.dragging = false;
-    }
-
-    function gameLoop() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw basket
-      ctx.fillStyle = '#6b3e2e';
-      ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
-      
-      // Update chocolates
-      chocolates.forEach((choco, index) => {
-        choco.y += choco.speed;
-        ctx.font = '30px Arial';
-        ctx.fillText('🍫', choco.x, choco.y);
-        
-        if (choco.y >= basket.y - 30 && choco.x >= basket.x && choco.x <= basket.x + basket.width) {
-          chocolates.splice(index, 1);
-          score++;
-        }
-      });
-
-      if (Math.random() < 0.02) {
-        chocolates.push({
-          x: Math.random() * 770,
-          y: 0,
-          speed: Math.random() * 3 + 2
-        });
-      }
-
-      ctx.fillStyle = 'black';
-      ctx.font = '24px Arial';
-      ctx.fillText(`Score: ${score}`, 10, 30);
-
-      if (gameRunning) requestAnimationFrame(gameLoop);
-    }
-
+    // Redirect to rose.html when the "Let's play a game" button is clicked
     document.getElementById('playGameBtn').addEventListener('click', () => {
-      document.getElementById('miniGame').style.display = 'block';
-      gameRunning = true;
-      gameLoop();
+      window.location.href = 'rose.html';
     });
-
-    function exitMiniGame() {
-      gameRunning = false;
-      document.getElementById('miniGame').style.display = 'none';
-      chocolates = [];
-      score = 0;
-    }
   </script>
 </body>
 </html>
