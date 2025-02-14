@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Romantic Crossword Journey - 40 Levels of Love</title>
+  <style>
+    /* Shared Variables */
+    :root {
+      --primary-color: #ff69b4;
+      --secondary-color: #ffb6c1;
+      --background-gradient: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+    }
+    /* Crossword Journey Styles */
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: var(--background-gradient);
+      color: #4b4b4b;
+      margin: 0;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      margin-bottom: 50px;
+    }
+    .header {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .progress-track {
+      flex-grow: 1;
+      height: 20px;
+      background: #fff;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary-color);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    .hearts {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .heart-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--primary-color);
+      opacity: 0.3;
+    }
+    .heart-icon.active {
+      opacity: 1;
+    }
+    .game-area {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+    .crossword-grid {
+      text-align: center;
+    }
+    .clues-panel {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .gift-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .gift-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .gift-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .gift-card:hover img {
+      transform: scale(1.05);
+    }
+    .download-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: var(--primary-color);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      text-decoration: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .gift-card:hover .download-btn {
+      opacity: 1;
+    }
+    .input-cell {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0 5px;
+      text-transform: uppercase;
+      border: 1px solid #333;
+    }
+    #checkButton {
+      margin-top: 1rem;
+      padding: 10px 20px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #resetBtn {
+      margin-top: 2rem;
+      padding: 10px 20px;
+      background: #555;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    /* Developer button: a small bulb emoji fixed at upper left with low z-index */
+    #devBtn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 900;
+      padding: 5px 10px;
+      background: #aaa;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    /* Developer panel */
+    #devPanel {
+      display: none;
+      margin-top: 10px;
+    }
+    #devPanel input {
+      padding: 5px;
+      font-size: 16px;
+    }
+    #goToLevelBtn {
+      padding: 5px 10px;
+      font-size: 16px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    /* Hint button and jumbled letters */
+    .hint-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary-color);
+      padding: 0 5px;
+    }
+    .jumbled-letters {
+      color: var(--primary-color);
+      margin-left: 5px;
+      font-style: italic;
+    }
+    .clue-item {
+      margin-bottom: 1rem;
+    }
+    /* Modal styles for prize popup, centered exactly */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+      border-radius: 10px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-content img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .close {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .modal-download {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 15px;
+    }
+    /* Finale page styles replaced by final modal message */
+    .finale-page {
+      /* Not used in this version */
+    }
+    .finale-message {
+      /* Not used in this version */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>❤️ Romantic Crossword Journey ❤️</h1>
+      <p>Complete 40 love-themed levels to unlock beautiful gifts!</p>
+    </div>
+    <div class="progress-container">
+      <div class="hearts" id="heartsContainer"></div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+    <div class="game-area">
+      <div class="crossword-grid" id="grid">
+        <!-- Interactive crossword grid will be generated here -->
+      </div>
+      <div class="clues-panel">
+        <div class="level-indicator">Level <span id="currentLevel">1</span>/40</div>
+        <div id="gameSpecificUI"></div>
+        <button id="checkButton">Check Answer</button>
+      </div>
+    </div>
+    <div class="gift-gallery" id="giftGallery">
+      <!-- Prize photo will only appear in the modal popup -->
+    </div>
+    <button id="resetBtn">Reset Progress</button>
+    <!-- Developer-only button (small bulb emoji) -->
+    <button id="devBtn">💡</button>
+    <!-- Developer panel for traversing levels (hidden by default) -->
+    <div id="devPanel">
+      <input type="number" id="devLevelInput" placeholder="Enter level (1-40)" min="1" max="40" />
+      <button id="goToLevelBtn">Go To Level</button>
+    </div>
+  </div>
+  
+  <!-- Modal structure for prize popup / final message -->
+  <div id="giftModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <p id="modalMessage"></p>
+      <img id="giftModalImage" src="" alt="Prize">
+      <a id="modalDownload" class="modal-download" download>Download This Memory</a>
+    </div>
+  </div>
+  
+  <script>
+    // On initial load, force a fresh game (level 1)
+    localStorage.setItem('currentLevel', '1');
+    localStorage.setItem('completedLevels', '[]');
+    let currentLevel = 1;
+    let completedLevels = [];
+
+    // Levels data with 40 levels—each level has one or more words with their clues.
+    const levels = [
+      { words: [ { answer: "LOVE", clue: "A four-letter word that warms hearts." }, { answer: "HEART", clue: "A five-letter word that symbolizes care." } ] },
+      { words: [ { answer: "SMILE", clue: "A five-letter word for a happy expression." } ] },
+      { words: [ { answer: "FUN", clue: "A three-letter word for enjoyment." }, { answer: "JOKE", clue: "A four-letter word for a playful tease." } ] },
+      { words: [ { answer: "HUG", clue: "A three-letter word for a warm embrace." }, { answer: "KISS", clue: "A four-letter word for affection." } ] },
+      { words: [ { answer: "LAUGH", clue: "A five-letter word for a joyful sound." }, { answer: "GIGGLE", clue: "A six-letter word for a silly laugh." } ] },
+      { words: [ { answer: "COOL", clue: "A four-letter word meaning awesome." } ] },
+      { words: [ { answer: "PEACE", clue: "A five-letter word for calmness." } ] },
+      { words: [ { answer: "BRAVE", clue: "A five-letter word for courageous." } ] },
+      { words: [ { answer: "CHILL", clue: "A five-letter word to relax." } ] },
+      { words: [ { answer: "FUNNY", clue: "A five-letter word for amusing." } ] },
+      { words: [ { answer: "SWEET", clue: "A five-letter word for charming." } ] },
+      { words: [ { answer: "SASSY", clue: "A five-letter word for cheeky." } ] },
+      { words: [ { answer: "CUTE", clue: "A four-letter word for adorable." } ] },
+      { words: [ { answer: "SNUG", clue: "A four-letter word for cozy." } ] },
+      { words: [ { answer: "WARM", clue: "A four-letter word for affectionate." } ] },
+      { words: [ { answer: "SASS", clue: "A four-letter word for lively attitude." } ] },
+      { words: [ { answer: "ZEST", clue: "A four-letter word for energy." } ] },
+      { words: [ { answer: "GLOW", clue: "A four-letter word for shine." } ] },
+      { words: [ { answer: "SHINE", clue: "A five-letter word for sparkle." } ] },
+      { words: [ { answer: "GRIN", clue: "A four-letter word for a big smile." } ] },
+      { words: [ { answer: "BRIGHT", clue: "A six-letter word for luminous." } ] },
+      { words: [ { answer: "LIVELY", clue: "A six-letter word for energetic." } ] },
+      { words: [ { answer: "CHEER", clue: "A five-letter word for joy." } ] },
+      { words: [ { answer: "GIDDY", clue: "A five-letter word for silly." } ] },
+      { words: [ { answer: "MERRY", clue: "A five-letter word for jolly." } ] },
+      { words: [ { answer: "PLAY", clue: "A four-letter word for fun." } ] },
+      { words: [ { answer: "JIVE", clue: "A four-letter word for lively dance." } ] },
+      { words: [ { answer: "QUIP", clue: "A four-letter word for a witty remark." } ] },
+      { words: [ { answer: "WITTY", clue: "A five-letter word for humorous." } ] },
+      { words: [ { answer: "CHUCKLE", clue: "A seven-letter word for a soft laugh." } ] },
+      { words: [ { answer: "SNICKER", clue: "A seven-letter word for a suppressed laugh." } ] },
+      { words: [ { answer: "CACKLE", clue: "A six-letter word for a loud laugh." } ] },
+      { words: [ { answer: "GRIN", clue: "A four-letter word for a happy smile." } ] },
+      { words: [ { answer: "GLOWING", clue: "A seven-letter word for radiantly happy." } ] },
+      { words: [ { answer: "VIVID", clue: "A five-letter word for bright and lively." } ] },
+      { words: [ { answer: "ZANY", clue: "A four-letter word for comically odd." } ] },
+      { words: [ { answer: "BUBBLE", clue: "A six-letter word for effervescence." } ] },
+      { words: [ { answer: "CHEEKY", clue: "A six-letter word for playfully rude." } ] },
+      { words: [ { answer: "SNUGGLE", clue: "A seven-letter word for a warm embrace." } ] },
+      { words: [ { answer: "HAPPILY", clue: "A seven-letter word for joyful living." } ] }
+    ];
+    
+    // Force a fresh start on load:
+    currentLevel = 1;
+    completedLevels = [];
+    localStorage.setItem('currentLevel', '1');
+    localStorage.setItem('completedLevels', '[]');
+    
+    function generateGame() {
+      generateInteractiveCrossword();
+      updateClues();
+      updateProgress();
+    }
+    
+    function generateInteractiveCrossword() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      const levelData = levels[currentLevel - 1];
+      let cellCounter = 1;
+      levelData.words.forEach(wordObj => {
+        const rowDiv = document.createElement('div');
+        rowDiv.style.display = 'flex';
+        rowDiv.style.justifyContent = 'center';
+        rowDiv.style.marginBottom = '10px';
+        wordObj.answer.split('').forEach(() => {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.maxLength = 1;
+          input.className = 'input-cell';
+          input.id = 'cell' + cellCounter;
+          rowDiv.appendChild(input);
+          cellCounter++;
+        });
+        grid.appendChild(rowDiv);
+      });
+    }
+    
+    // Jumble function to scramble word letters (for hints)
+    function jumbleWord(word) {
+      let letters = word.split('');
+      for (let i = letters.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [letters[i], letters[j]] = [letters[j], letters[i]];
+      }
+      return letters.join('');
+    }
+    
+    function updateClues() {
+      const levelData = levels[currentLevel - 1];
+      let cluesHtml = '';
+      levelData.words.forEach((wordObj, index) => {
+        cluesHtml += `
+          <div class="clue-item">
+            <span>${index + 1}. ${wordObj.clue}</span>
+            <button class="hint-btn" data-answer="${wordObj.answer}">❤️ Hint</button>
+            <span class="jumbled-letters"></span>
+          </div>
+        `;
+      });
+      document.getElementById('gameSpecificUI').innerHTML = cluesHtml;
+      document.getElementById('currentLevel').innerText = currentLevel;
+    
+      document.querySelectorAll('.hint-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const answer = this.dataset.answer;
+          const jumbled = jumbleWord(answer);
+          this.nextElementSibling.textContent = `Jumbled letters: ${jumbled}`;
+        });
+      });
+    }
+    
+    function updateProgress() {
+      const progress = (completedLevels.length / 40) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+    
+      const heartsContainer = document.getElementById('heartsContainer');
+      heartsContainer.innerHTML = '';
+      for (let i = 0; i < 10; i++) {
+        const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        heart.setAttribute('class', `heart-icon ${i < completedLevels.length / 4 ? 'active' : ''}`);
+        heart.setAttribute('viewBox', '0 0 24 24');
+        heart.innerHTML = '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>';
+        heartsContainer.appendChild(heart);
+      }
+    }
+    
+    // Updated checkGifts function: shows the prize modal for milestone levels.
+    function checkGifts() {
+      const milestones = [10, 20, 30, 35, 40];
+      milestones.forEach(level => {
+        if (completedLevels.includes(level)) {
+          // For level 40, we now show a final modal message (instead of redirecting)
+          if (level === 40) {
+            showFinalModal();
+            return;
+          }
+          showGiftModal(level);
+        }
+      });
+    }
+    
+    function showGiftModal(level) {
+      const gift = giftMap[level];
+      const modal = document.getElementById("giftModal");
+      const modalImg = document.getElementById("giftModalImage");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalMessage = document.getElementById("modalMessage");
+      const modalDownload = document.getElementById("modalDownload");
+    
+      modalTitle.textContent = `Congratulations on completing Level ${level}!`;
+      modalMessage.textContent = gift.message;
+      if (gift.image && gift.image.trim() !== "") {
+        modalImg.src = gift.image;
+        modalDownload.href = gift.image;
+      } else {
+        modalImg.src = "default_placeholder.jpg";
+        modalDownload.href = "default_placeholder.jpg";
+      }
+      modal.style.display = "flex";
+    }
+    
+    function showFinalModal() {
+      // Instead of redirecting, show a final modal message on the same page.
+      const modal = document.getElementById("giftModal");
+      const modalImg = document.getElementById("giftModalImage");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalMessage = document.getElementById("modalMessage");
+      const modalDownload = document.getElementById("modalDownload");
+      
+      modalTitle.textContent = "Congratulations!";
+      modalMessage.textContent = "You've completed all 40 levels of love! Thank you for playing our Romantic Crossword Journey.";
+      // Optionally, set a final image (adjust the URL as needed)
+      modalImg.src = "WhatsApp Image 2025-02-08 at 21.11.21_6109ae6e.jpg"; 
+      modalDownload.style.display = "none"; // Hide the download button if not needed
+      modal.style.display = "flex";
+
+      setTimeout(() => {
+    window.location.href = "valentine.html";
+  }, 5000);
+    }
+    
+    // Modified checkAnswer function.
+    function checkAnswer() {
+      const levelData = levels[currentLevel - 1];
+      let cellCounter = 1;
+      let allCorrect = true;
+      levelData.words.forEach(wordObj => {
+        let userAnswer = '';
+        for (let i = 0; i < wordObj.answer.length; i++) {
+          const cell = document.getElementById('cell' + cellCounter);
+          userAnswer += cell.value;
+          cellCounter++;
+        }
+        if (userAnswer.toUpperCase() !== wordObj.answer.toUpperCase()) {
+          allCorrect = false;
+        }
+      });
+      if (allCorrect) {
+        alert('Correct! ❤️');
+        let completedLevel = currentLevel;
+        completedLevels.push(completedLevel);
+        localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+        localStorage.setItem('currentLevel', ++currentLevel);
+        if ([10,20,30,35,40].includes(completedLevel)) {
+          if (completedLevel === 40) {
+            showFinalModal();
+          } else {
+            showGiftModal(completedLevel);
+          }
+        }
+        if (currentLevel > 40) {
+          showFinalModal();
+        } else {
+          generateGame();
+          updateProgress();
+        }
+      } else {
+        alert('Try again! 💔');
+      }
+    }
+    
+    // Gift mapping with congratulatory messages.
+    const giftMap = {
+      10: {
+        image: 'WhatsApp Image 2025-02-13 at 16.11.00_78b44a9b.jpg',
+        message: 'Congratulations on completing 10 levels! 😚😁 Our journey is just beginning...'
+      },
+      20: {
+        image: 'WhatsApp Image 2025-02-13 at 16.11.01_d77c1367.jpg',
+        message: '20 levels conquered! 😚 Your love shines brighter with each step ❤️'
+      },
+      30: {
+        image: 'WhatsApp Image 2025-02-13 at 16.11.01_92b008d5.jpg',
+        message: '30 levels of love! You make every moment magical ✨'
+      },
+      35: {
+        image: 'WhatsApp Image 2025-02-13 at 16.11.00_b2cc9b17.jpg',
+        message: '35 levels completed! My heart skips a beat with every correct answer 💓'
+      },
+      40: {
+        image: '',  // Not used since final modal is shown instead
+        message: '40 levels of pure love! You\'ve won my heart completely 💖'
+      }
+    };
+    
+    // Modal close functionality.
+    document.querySelector('.close').addEventListener("click", function() {
+      document.getElementById("giftModal").style.display = "none";
+      // Ensure the download button is visible again for subsequent modals
+      document.getElementById("modalDownload").style.display = "inline-block";
+    });
+    
+    window.onclick = function(event) {
+      const modal = document.getElementById("giftModal");
+      if (event.target === modal) {
+        modal.style.display = "none";
+        document.getElementById("modalDownload").style.display = "inline-block";
+      }
+    };
+    
+    document.getElementById('checkButton').addEventListener('click', checkAnswer);
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      localStorage.clear();
+      completedLevels = [];
+      currentLevel = 1;
+      generateGame();
+      updateProgress();
+    });
+    
+    // Developer-only button event listener.
+    document.getElementById('devBtn').addEventListener('click', function() {
+      const code = prompt("Enter developer code:");
+      if (code === "bubu") {
+          alert("Developer mode enabled.");
+          document.getElementById('devPanel').style.display = 'block';
+      } else {
+          alert("Incorrect code.");
+      }
+    });
+    
+    // Developer panel "Go To Level" button event listener.
+    document.getElementById('goToLevelBtn').addEventListener('click', function(){
+      const level = parseInt(document.getElementById('devLevelInput').value);
+      if(level >= 1 && level <= 40) {
+         currentLevel = level;
+         generateGame();
+         updateProgress();
+         alert("Moved to level " + level);
+      } else {
+         alert("Invalid level. Please enter a number between 1 and 40.");
+      }
+    });
+    
+    // Start the game fresh
+    generateGame();
+    updateProgress();
+  </script>
+</body>
+</html>

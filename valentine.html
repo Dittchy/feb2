@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Eternal Love Story ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Enhanced Romantic Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ff9aa2 0%, #ffb7b2 100%);
+      font-family: 'Courier New', Courier, monospace;
+      overflow-y: auto;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff69b4" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+    }
+
+    .heart-pattern {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background-image: url("data:image/svg+xml,%3Csvg width='52' height='52' viewBox='0 0 52 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath fill='%23ff69b4' d='M2 2.414L25.914 26 2 49.586V2.414zM50 49.586L26.086 26 50 2.414v47.172z' opacity='.1'/%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .floating-emoji {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0.2;
+      animation: float 8s infinite linear;
+      user-select: none;
+      transition: opacity 0.5s;
+    }
+
+    .floating-emoji:hover {
+      opacity: 0.8;
+      animation-play-state: paused;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(110vh) rotate(-10deg) scale(0.8); }
+      100% { transform: translateY(-30vh) rotate(15deg) scale(1.2); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255, 105, 180, 0.2);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255, 105, 180, 0.1);
+    }
+
+    h1 {
+      color: #ff69b4;
+      font-size: 3.5em;
+      text-align: center;
+      margin-bottom: 30px;
+      font-family: 'Brush Script MT', cursive;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      animation: heartbeat 1.5s infinite;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #ff69b4, transparent);
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .love-letter {
+      font-size: 1.2em;
+      line-height: 1.8;
+      color: #4b4b4b;
+      text-align: justify;
+      position: relative;
+      padding: 30px;
+      background: linear-gradient(45deg, #fff0f588, #ffe4e188);
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .love-letter p:first-child::first-letter {
+      font-size: 2.5em;
+      color: #ff69b4;
+      float: left;
+      margin-right: 8px;
+      line-height: 0.8;
+    }
+
+    .photo-frame {
+      width: 100%;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 15px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(255,105,180,0.15);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .photo-frame::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff69b411, #ff149311);
+      pointer-events: none;
+    }
+
+    .photo-frame:hover {
+      transform: scale(1.02) rotate(1deg);
+      box-shadow: 0 0 35px rgba(255,105,180,0.25);
+    }
+
+    .photo-frame img {
+      width: 100%;
+      border-radius: 10px;
+      border: 2px solid #ff69b4;
+      transition: transform 0.3s ease;
+    }
+
+    .love-download-btn {
+      display: block;
+      width: 220px;
+      margin: 40px auto;
+      padding: 18px 35px;
+      background: #ff69b4;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 35px;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .love-download-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: 0.5s;
+    }
+
+    .love-download-btn:hover {
+      background: #ff1493;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 5px 15px rgba(255,20,147,0.4);
+    }
+
+    .love-download-btn:hover::before {
+      left: 100%;
+    }
+
+    .bg-heart {
+      position: fixed;
+      color: rgba(255,105,180,0.08);
+      font-size: 25vw;
+      z-index: -1;
+      animation: pulse 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.08; transform: scale(1); }
+      50% { opacity: 0.12; transform: scale(1.15); }
+    }
+
+    /* Interactive Heart Cursor Effect */
+    .heart-cursor {
+      position: fixed;
+      pointer-events: none;
+      animation: cursorHeart 0.6s ease-out forwards;
+    }
+
+    @keyframes cursorHeart {
+      0% { opacity: 1; transform: scale(0); }
+      100% { opacity: 0; transform: scale(2); }
+    }
+
+    /* Cube Popup Styles */
+    .cube {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      z-index: 1001;
+      background: rgba(255,105,180,0.9);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    .cube.active {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="heart-pattern"></div>
+  
+  <!-- Enhanced Floating Emojis -->
+  <script>
+    const emojis = ['🧸', '🍫', '🍪', '💋', '🫂', '🌷', '💝', '💌', '🎀', '🌸', '🎁', '🥰'];
+    function createEmoji() {
+      const emoji = document.createElement('div');
+      emoji.className = 'floating-emoji';
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + 'vw';
+      emoji.style.animationDuration = (Math.random() * 4 + 6) + 's';
+      emoji.style.fontSize = (Math.random() * 1 + 1.2) + 'rem';
+      emoji.style.opacity = Math.random() * 0.3 + 0.1;
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 10000);
+    }
+    setInterval(createEmoji, 1200);
+
+    // Interactive Heart Cursor Effect
+    document.addEventListener('click', (e) => {
+      const heart = document.createElement('div');
+      heart.className = 'heart-cursor';
+      heart.style.left = e.pageX + 'px';
+      heart.style.top = e.pageY + 'px';
+      heart.innerHTML = '❤️';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 600);
+    });
+  </script>
+  
+  <div class="container">
+    <h1>To My Eternal Valentine 💖</h1>
+    <div class="love-letter">
+      <p>My Dearest Love,</p>
+      <p>On this day of celebrating hearts, I want you to know yours is the most extraordinary one I've ever known. You're not just my Valentine - you're my morning sunshine, my late-night confidant, the calm in my chaos and the spark in my ordinary days. The way you love with such warmth and intention has rewritten what I thought possible between two people. Thank you for being my safe harbor and greatest adventure all at once, for seeing me fully yet choosing me daily. Through all our laughter-filled moments and quiet understandings, you've shown me love isn't just a feeling - it's the sacred space we keep building together. However our story unfolds, know this: My heart recognizes yours as its eternal home. Happy Valentine's Day to the only girl who makes every day feel like a love story💖💞</p>
+      
+      <div class="photo-frame">
+        <img src="WhatsApp Image 2025-02-08 at 21.11.22_b6cf838f.jpg" alt="Our Timeless Moment">
+      </div>
+
+      <p>You are not just my partner, but my:</p>
+      <ul style="list-style: none; padding-left: 20px;">
+        <li>🌹 Eternal source of joy</li>
+        <li>🕊️ Peace in life's chaos</li>
+        <li>✨ Magic in ordinary moments</li>
+        <li>💘 Reason to believe in forever</li>
+      </ul>
+
+      <p>I promise to always:</p>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 25px 0;">
+        <div style="padding: 15px; background: rgba(255,105,180,0.1); border-radius: 10px;">
+          💞 Cherish every moment
+        </div>
+        <div style="padding: 15px; background: rgba(255,105,180,0.1); border-radius: 10px;">
+          🌟 Support your dreams
+        </div>
+        <div style="padding: 15px; background: rgba(255,105,180,0.1); border-radius: 10px;">
+          🤗 Be your safe haven
+        </div>
+        <div style="padding: 15px; background: rgba(255,105,180,0.1); border-radius: 10px;">
+          💌 Love you unconditionally
+        </div>
+      </div>
+
+      <p>I know that just this webpage may not be the best gift, but just know that this is just a fraction of how much I love "You"🌙✨</p>
+
+      <a href="WhatsApp Image 2025-02-08 at 21.11.22_b6cf838f.jpg" download class="love-download-btn">
+        💖 Capture This Memory Forever 📸
+      </a>
+    </div>
+  </div>
+  
+  <div class="bg-heart" style="top:10%; left:10%">❤️</div>
+  <div class="bg-heart" style="top:70%; left:80%">❤️</div>
+  <div class="bg-heart" style="top:40%; left:90%">❤️</div>
+  
+  <!-- Cube Popup: Initially hidden; appears when scrolled to the bottom and disappears when scrolled up -->
+  <div class="cube" id="valentineCube">
+    <h2>My Beloved Valentine!</h2>
+    <p>You are the heartbeat of my soul.</p>
+  </div>
+  
+  <script>
+    // Scroll-triggered Cube Popup: When scrolled to the bottom, add "active", otherwise remove it.
+    window.addEventListener('scroll', function() {
+      const cube = document.getElementById('valentineCube');
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+        cube.classList.add('active');
+      } else {
+        cube.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
