@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chocolate Day Celebration! 🍫</title>
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      perspective: 1000px;
+      padding: 20px;
+      overflow: hidden;
+    }
+    .hearts-container {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .heart-float {
+      position: absolute;
+      font-size: 24px;
+      animation: float 6s infinite linear;
+      opacity: 0.7;
+    }
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    .cube {
+      width: 280px;
+      height: 280px;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: rotate 20s infinite linear;
+      transition: transform 0.5s;
+      z-index: 2;
+    }
+    .cube:hover {
+      animation-play-state: paused;
+    }
+    @keyframes rotate {
+      from { transform: rotateY(0deg) rotateX(15deg); }
+      to { transform: rotateY(360deg) rotateX(15deg); }
+    }
+    .cube div {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid #ff477e;
+      box-shadow: 0 0 30px rgba(255, 69, 96, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
+      padding: 20px;
+      backdrop-filter: blur(5px);
+    }
+    .front  { transform: translateZ(140px); }
+    .back   { transform: rotateY(180deg) translateZ(140px); }
+    .left   { transform: rotateY(-90deg) translateZ(140px); }
+    .right  { transform: rotateY(90deg) translateZ(140px); }
+    .top    { transform: rotateX(90deg) translateZ(140px); }
+    .bottom { transform: rotateX(-90deg) translateZ(140px); }
+    h1 {
+      font-family: 'Parisienne', cursive;
+      font-size: 2.2em;
+      color: #d63384;
+      text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.1em;
+      color: #d63384;
+      line-height: 1.6;
+      font-weight: 400;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+    }
+    .heart-pulse {
+      font-size: 50px;
+      animation: pulse 1.5s infinite;
+      margin: 10px 0;
+      color: #ff477e;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+      /* Make it appear clickable */
+      cursor: pointer;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .emoji-row {
+      font-size: 24px;
+      margin: 10px 0;
+      animation: shake 2s infinite;
+    }
+    @keyframes shake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+    }
+  </style>
+</head>
+<body>
+    <div class="hearts-container" id="hearts"></div>
+
+    <div class="cube">
+        <div class="front">
+            <div class="heart-pulse">❤️</div>
+            <h1>My Sweetheart! 💖</h1>
+            <p>You're My Forever Chocolate! 🍫</p>
+        </div>
+        <div class="back">
+            <p>🎉 Congratulations on The Chocolate Day! 🎉<br>
+            Our love - sweeter than the finest chocolates! 🍫💖<br>
+            You're my eternal treat! 🥰</p>
+        </div>
+        <div class="left">
+            <div class="emoji-row">🍫🍬🍩🍪🎂🍭🍫</div>
+            <div class="emoji-row">💝💖💗💓💞💕💟</div>
+        </div>
+        <div class="right">
+            <p>To countless sweet moments ahead!<br>
+            Forever yours,<br>
+            Your Dev 💕</p>
+        </div>
+        <div class="top">
+            <p>Love melts hearts like chocolate! 💖</p>
+        </div>
+        <div class="bottom">
+            <p>Happy Chocolate Day! 🎉</p>
+            <div class="emoji-row">✨🎊🎈</div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts');
+            const heartCount = 20;
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-float';
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // Add event listener to the heart in the cube to direct to crossword.html
+        document.querySelector('.heart-pulse').addEventListener('click', function() {
+            window.location.href = "crossword.html";
+        });
+
+        // Cube popup is already active (via cube animation) in this page.
+        // (If you want additional scroll-triggered behavior on this page, you can add that here.)
+    </script>
+</body>
+</html>
